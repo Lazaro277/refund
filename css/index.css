@@ -2,3 +2,36 @@
 @import url(utility.css);
 @import url(refund-request.css);
 @import url(right-container.css);
+
+
+#logo {
+  background: url(../assets/images/logo.svg) no-repeat;
+  background-size: 9rem;
+  text-indent: -10000px;
+}
+
+main {
+  display: flex;
+  gap: 1.5rem;
+  height: 70dvh;
+
+  #refund-request {
+    width: 40%;
+  }
+
+  #right-container {
+    width: 60%;
+  }
+
+  @media (width <50em) {
+    flex-direction: column;
+
+    #refund-request {
+      width: 100%;
+    }
+
+    #right-container {
+      width: 100%;
+    }
+  }
+}

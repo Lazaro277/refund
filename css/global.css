@@ -39,6 +39,7 @@ body {
   font-family: var(--ff-open-sans);
   font-size: var(--fs-md);
   line-height: 1.4;
+  background-color: var(--gray-400);
   scrollbar-width: none;
 }
 
