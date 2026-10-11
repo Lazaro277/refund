@@ -41,3 +41,32 @@
 .border-radius-0_7 {
   border-radius: .7rem;
 }
+
+.expense-list {
+  list-style: none;
+  padding-top: 1rem;
+  padding-left: 0;
+
+  >li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    >#expense-description {
+      display: flex;
+      flex-direction: column;
+      font-weight: 700;
+
+      >#expense-category {
+        color: var(--gray-200);
+        font-weight: 400;
+        font-size: .85rem;
+      }
+    }
+
+    >#expense-value {
+      margin-left: auto;
+    }
+  }
+}
