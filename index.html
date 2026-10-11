@@ -34,11 +34,51 @@
 
   <main>
     <div id="refund-request">
-      fasdf
+      <h2 class="h4 fw-bold mb-3 gray-100">Solicitação de reembolso</h2>
+      <p class="fs-6 gray-200 mb-5">Informe os dados da despesa para solicitar reembolso. <br>
+        A despesa será analisada e reembolsada em até 30 dias.</p>
+
+      <form>
+
+        <div class="mb-3">
+          <label for="company-title" class="form-label">Título da despesa</label>
+          <input type="text" id="company-title" class="form-control form-control-lg border-radius-0_7"
+            placeholder="Insira um título">
+        </div>
+
+        <div class="mb-3">
+          <label for="category" class="form-label">Categoria</label>
+          <select id="category" class="form-select form-select-lg border-radius-0_7">
+            <option value="0">Alimentação</option>
+            <option value="0">Hospedagem</option>
+            <option value="0">Transporte</option>
+            <option value="0">Serviços</option>
+            <option value="0">Outros</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="amount" class="form-label">Valor</label>
+          <input type="text" id="amount" class="form-control form-control-lg border-radius-0_7" placeholder="0,00">
+        </div>
+
+
+        <button type="submit" class="btn bg-green-100 text-white fw-bold border-radius-0_7 disabled">Adicionar
+          despesa</button>
+      </form>
     </div>
 
     <div id="right-container">
-      afdsafsdfasdf
+      <div id="header-right-container"
+        class="d-flex justify-content-between align-items-center gray-200 border-bottom border-2 pb-4">
+        <div class="d-flex align-items-center gap-3">
+          <h4 class="m-0 fw-normal fs-4">Minhas solicitações</h4>
+          <span class="fs-4">&bull;</span>
+          <p class="m-0 text-uppercase">6 despesas</p>
+        </div>
+        <p class="m-0 d-flex align-items-center gap-2">R$ <span id="total-value"
+            class="text-black fw-bold fs-4">2343,64</span></p>
+      </div>
     </div>
   </main>
 

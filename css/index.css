@@ -15,6 +15,14 @@ main {
   gap: 1.5rem;
   height: 70dvh;
 
+  >div {
+    background-color: var(--gray-500);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 0 15px var(--gray-300);
+  }
+
+
   #refund-request {
     width: 40%;
   }
@@ -26,10 +34,7 @@ main {
   @media (width <50em) {
     flex-direction: column;
 
-    #refund-request {
-      width: 100%;
-    }
-
+    #refund-request,
     #right-container {
       width: 100%;
     }

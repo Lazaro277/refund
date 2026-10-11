@@ -1,3 +1,66 @@
 #refund-request {
-  background-color: var(--gray-500);
+  align-content: center;
+
+  form {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+
+    label {
+      text-transform: uppercase;
+      font-size: .8rem;
+      color: var(--gray-200);
+    }
+
+    input {
+      height: 2rem;
+    }
+
+    select {
+      cursor: pointer;
+      color: var(--gray-200);
+    }
+
+    input,
+    select {
+      border: 1px solid var(--gray-300);
+
+      &:hover {
+        border-color: var(--gray-200);
+      }
+
+      &:focus {
+        border: 2px solid var(--green-100);
+        box-shadow: 1px 1px 5px var(--green-200);
+      }
+    }
+
+    >div:first-child {
+      grid-column: span 12;
+
+    }
+
+    >div:nth-child(2) {
+      grid-column: span 7;
+    }
+
+    >div:nth-child(3) {
+      grid-column: span 5;
+    }
+
+    button[type="submit"] {
+      grid-column: span 12;
+      height: 3rem;
+      transition: background-color 250ms ease-in-out, box-shadow 250ms ease-in-out;
+
+      &.disabled {
+        background-color: var(--green-300);
+      }
+
+      &:hover {
+        background-color: var(--green-200);
+        box-shadow: 0 0 10px #13965eae;
+      }
+    }
+  }
 }
