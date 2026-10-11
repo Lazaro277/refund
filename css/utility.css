@@ -42,6 +42,10 @@
   border-radius: .7rem;
 }
 
+.error {
+  border: 2px solid var(--danger) !important;
+}
+
 .expense-list {
   list-style: none;
   padding-top: 1rem;

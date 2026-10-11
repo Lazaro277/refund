@@ -35,6 +35,11 @@
         box-shadow: 1px 1px 5px var(--green-200);
       }
 
+      .error {
+        border: 2px solid var(--danger);
+        box-shadow: 1px 1px 5px var(--danger) !important;
+      }
+
     }
 
     >div:first-child {
@@ -57,6 +62,12 @@
 
       &.disabled {
         background-color: var(--green-300);
+      }
+
+      &.btn:disabled,
+      &.btn.disabled,
+      fieldset:disabled .btn {
+        pointer-events: initial;
       }
 
       &:hover {
