@@ -24,6 +24,7 @@
     input,
     select {
       border: 1px solid var(--gray-300);
+      transition: border 150ms ease-in-out, box-shadow 150ms ease-in-out;
 
       &:hover {
         border-color: var(--gray-200);
@@ -33,6 +34,7 @@
         border: 2px solid var(--green-100);
         box-shadow: 1px 1px 5px var(--green-200);
       }
+
     }
 
     >div:first-child {
