@@ -3,6 +3,7 @@ const amountInput = document.querySelector('#amount')
 const titleInput = document.querySelector('#company-title')
 const submitButton = document.querySelector('form button[type="submit"]')
 const form = document.querySelector('form')
+const expenseList = document.querySelector('.expense-list')
 
 //quando abrir as opçoes do select, a opçao default 'selecione' desaparece
 categorySelect.addEventListener('focus', () => {
@@ -13,13 +14,9 @@ categorySelect.addEventListener('focus', () => {
   //quando focado remove a classe error e fica com a aparencia de focus novamente
   categorySelect.classList.remove('error')
 })
-
-//quando focado remove a classe error e fica com a aparencia de focus novamente
 titleInput.addEventListener('focus', () => {
   titleInput.classList.remove('error')
 })
-
-//quando focado remove a classe error e fica com a aparencia de focus novamente
 amountInput.addEventListener('focus', () => {
   amountInput.classList.remove('error')
 })
@@ -28,13 +25,9 @@ amountInput.addEventListener('focus', () => {
 categorySelect.addEventListener('blur', () => {
   validateForm()
 })
-
-//quando é blur, verifica novamente se está tudo certo com a validação
 titleInput.addEventListener('blur', () => {
   validateForm()
 })
-
-//quando é blur, verifica novamente se está tudo certo com a validação
 amountInput.addEventListener('blur', () => {
   validateForm()
 })
@@ -87,9 +80,41 @@ function validateForm() {
 form.addEventListener('submit', (event) => {
   event.preventDefault()
 
-  //se tudo estiver preenchido, segue para inserir a despesa
+  //se tudo estiver preenchido, segue para inserir' a despesa
   if (validateForm()) {
-    console.log(titleInput.value, categorySelect.options[categorySelect.selectedIndex].textContent, amountInput.value)
+
+    //salva os valores digitados pelo usuário, no title, deixa com a primeira letra maiuscúla
+    const titleValue = titleInput.value.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
+    const categoryValue = categorySelect.options[categorySelect.selectedIndex].textContent
+    const amountValue = amountInput.value
+
+    //cria os elementos e insere na lista
+    const li = document.createElement('li')
+    const expenseIcon = document.createElement('span')
+    const expenseDescription = document.createElement('span')
+    const expenseValue = document.createElement('span')
+    const expenseCategory = document.createElement('span')
+    const imgCategory = document.createElement('img')
+    const imgRemove = document.createElement('img')
+
+    expenseIcon.id = 'expense-icon'
+    expenseDescription.id = 'expense-description'
+    expenseValue.id = 'expense-value'
+    expenseCategory.id = 'expense-category'
+
+    imgCategory.src = '../assets/icons/food.svg'
+    imgRemove.src = '../assets/icons/remove.svg'
+
+    expenseIcon.append(imgCategory)
+    expenseDescription.textContent = titleValue
+    expenseCategory.textContent = categoryValue
+    expenseValue.textContent = amountValue
+    expenseValue.append(imgRemove)
+
+    expenseDescription.append(expenseCategory)
+    li.append(expenseIcon, expenseDescription, expenseValue)
+    expenseList.append(li)
+
 
     //limpa os campos após a insersão
     titleInput.value = ''

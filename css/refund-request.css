@@ -35,9 +35,9 @@
         box-shadow: 1px 1px 5px var(--green-200);
       }
 
-      .error {
+      &.error {
         border: 2px solid var(--danger);
-        box-shadow: 1px 1px 5px var(--danger) !important;
+        box-shadow: 1px 1px 5px var(--danger);
       }
 
     }
