@@ -4,6 +4,7 @@ const titleInput = document.querySelector('#company-title')
 const submitButton = document.querySelector('form button[type="submit"]')
 const form = document.querySelector('form')
 const expenseList = document.querySelector('.expense-list')
+let countExpense = 0
 
 //quando abrir as opçoes do select, a opçao default 'selecione' desaparece
 categorySelect.addEventListener('focus', () => {
@@ -83,6 +84,7 @@ form.addEventListener('submit', (event) => {
   //se tudo estiver preenchido, segue para inserir' a despesa
   if (validateForm()) {
 
+
     //salva os valores digitados pelo usuário, no title, deixa com a primeira letra maiuscúla
     const titleValue = titleInput.value.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
     const categoryValue = categorySelect.options[categorySelect.selectedIndex].textContent
@@ -97,6 +99,7 @@ form.addEventListener('submit', (event) => {
     const imgCategory = document.createElement('img')
     const imgRemove = document.createElement('img')
 
+    li.id = `expense_${countExpense}`
     expenseIcon.id = 'expense-icon'
     expenseDescription.id = 'expense-description'
     expenseValue.id = 'expense-value'
@@ -104,6 +107,11 @@ form.addEventListener('submit', (event) => {
 
     imgCategory.src = '../assets/icons/food.svg'
     imgRemove.src = '../assets/icons/remove.svg'
+    imgRemove.style.cursor = 'pointer'
+    imgRemove.addEventListener('click', () => {
+      li.remove()
+      emptyList()
+    })
 
     expenseIcon.append(imgCategory)
     expenseDescription.textContent = titleValue
@@ -114,7 +122,11 @@ form.addEventListener('submit', (event) => {
     expenseDescription.append(expenseCategory)
     li.append(expenseIcon, expenseDescription, expenseValue)
     expenseList.append(li)
+    countExpense++
 
+
+    //remove a mensagem de lista vazia
+    emptyList()
 
     //limpa os campos após a insersão
     titleInput.value = ''
@@ -123,4 +135,8 @@ form.addEventListener('submit', (event) => {
 
   }
 })
+
+function emptyList() {
+  expenseList.classList.toggle('hide-empty-message', expenseList.querySelectorAll('li').length !== 1)
+}
 
