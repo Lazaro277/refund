@@ -5,6 +5,9 @@ const submitButton = document.querySelector('form button[type="submit"]')
 const form = document.querySelector('form')
 const expenseList = document.querySelector('.expense-list')
 let countExpense = 0
+let totalAmount = 0
+const countExpenseElement = document.querySelector('#count-expense')
+countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesa`
 
 //quando abrir as opçoes do select, a opçao default 'selecione' desaparece
 categorySelect.addEventListener('focus', () => {
@@ -90,6 +93,17 @@ form.addEventListener('submit', (event) => {
     const categoryValue = categorySelect.options[categorySelect.selectedIndex].textContent
     const amountValue = amountInput.value
 
+    const totalValue = document.querySelector('#total-value')
+    const numericAmount = Number(
+      amountValue.replace('R$ ', '').replace(/\./g, '').replace(',', '.')
+    )
+
+    totalAmount += numericAmount
+    totalValue.textContent = totalAmount.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+
     //cria os elementos e insere na lista
     const li = document.createElement('li')
     const expenseIcon = document.createElement('span')
@@ -111,6 +125,18 @@ form.addEventListener('submit', (event) => {
     imgRemove.addEventListener('click', () => {
       li.remove()
       emptyList()
+
+      totalAmount -= numericAmount
+      totalValue.textContent = totalAmount.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
+
+      if (expenseList.querySelectorAll('li').length <= 2) {
+        countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesa`
+      } else {
+        countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesas`
+      }
     })
 
     expenseIcon.append(imgCategory)
@@ -123,6 +149,12 @@ form.addEventListener('submit', (event) => {
     li.append(expenseIcon, expenseDescription, expenseValue)
     expenseList.append(li)
     countExpense++
+
+    if (expenseList.querySelectorAll('li').length <= 2) {
+      countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesa`
+    } else {
+      countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesas`
+    }
 
 
     //remove a mensagem de lista vazia
