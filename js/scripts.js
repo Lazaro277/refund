@@ -137,8 +137,8 @@ form.addEventListener('submit', (event) => {
     expenseValue.id = 'expense-value'
     expenseCategory.id = 'expense-category'
 
-    imgCategory.src = `../assets/icons/${imagesNames[categoryValue].nameImage}.svg`
-    imgRemove.src = '../assets/icons/remove.svg'
+    imgCategory.src = `assets/icons/${imagesNames[categoryValue].nameImage}.svg`
+    imgRemove.src = 'assets/icons/remove.svg'
     imgRemove.style.cursor = 'pointer'
     imgRemove.addEventListener('click', () => {
       li.remove()
