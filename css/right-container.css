@@ -14,8 +14,11 @@
 
   ul[role="list"] {
     flex: 1;
+    min-height: 0;
     margin-bottom: 0;
     align-content: center;
+    overflow-y: auto;
+    scrollbar-width: thin;
 
     &.hide-empty-message {
       align-content: start;

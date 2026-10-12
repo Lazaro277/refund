@@ -7,7 +7,9 @@
 #logo {
   background: url(../assets/images/logo.svg) no-repeat;
   background-size: 9rem;
+  padding-block: .3rem;
   text-indent: -10000px;
+  cursor: pointer;
 }
 
 main {
@@ -31,12 +33,28 @@ main {
     width: 60%;
   }
 
-  @media (width <50em) {
+  @media (width <62em) {
+    height: auto;
     flex-direction: column;
+    margin-bottom: 2rem;
+
+    body {
+      padding-bottom: 2rem;
+    }
 
     #refund-request,
     #right-container {
       width: 100%;
+    }
+
+    #right-container {
+      height: 70dvh;
+    }
+  }
+
+  @media (width <30em) {
+    >div {
+      padding: 1.5rem;
     }
   }
 }

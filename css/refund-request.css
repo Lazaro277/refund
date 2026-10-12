@@ -77,3 +77,19 @@
     }
   }
 }
+
+@media (width <30em) {
+  #refund-request {
+
+    form {
+
+      >div:nth-child(2) {
+        grid-column: span 12;
+      }
+
+      >div:nth-child(3) {
+        grid-column: span 12;
+      }
+    }
+  }
+}

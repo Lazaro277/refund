@@ -9,6 +9,24 @@ let totalAmount = 0
 const countExpenseElement = document.querySelector('#count-expense')
 countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesa`
 
+const imagesNames = {
+  Alimentação: {
+    nameImage: 'food'
+  },
+  Hospedagem: {
+    nameImage: 'accommodation'
+  },
+  Transporte: {
+    nameImage: 'transport'
+  },
+  Serviços: {
+    nameImage: 'services'
+  },
+  Outros: {
+    nameImage: 'others'
+  },
+}
+
 //quando abrir as opçoes do select, a opçao default 'selecione' desaparece
 categorySelect.addEventListener('focus', () => {
   if (categorySelect.value) {
@@ -119,7 +137,7 @@ form.addEventListener('submit', (event) => {
     expenseValue.id = 'expense-value'
     expenseCategory.id = 'expense-category'
 
-    imgCategory.src = '../assets/icons/food.svg'
+    imgCategory.src = `../assets/icons/${imagesNames[categoryValue].nameImage}.svg`
     imgRemove.src = '../assets/icons/remove.svg'
     imgRemove.style.cursor = 'pointer'
     imgRemove.addEventListener('click', () => {

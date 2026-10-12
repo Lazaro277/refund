@@ -45,7 +45,7 @@
 
 .expense-list {
   list-style: none;
-  padding-top: 1rem;
+  margin-top: 1rem;
   padding-left: 0;
 
   >li {
@@ -53,6 +53,7 @@
     align-items: center;
     gap: 1rem;
     margin-top: 1rem;
+    transition: box-shadow 150ms ease;
 
     >#expense-description {
       display: flex;
@@ -64,6 +65,7 @@
         font-weight: 400;
         font-size: .85rem;
       }
+
     }
 
     >#expense-value {
@@ -72,6 +74,10 @@
       img {
         margin-left: .5rem;
       }
+    }
+
+    &:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.268);
     }
   }
 }
