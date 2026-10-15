@@ -10,6 +10,13 @@
       text-transform: uppercase;
       font-size: .8rem;
       color: var(--gray-200);
+
+      &:has(+input:focus),
+      &:has(+select:focus) {
+        color: var(--green-100);
+        font-weight: 600;
+
+      }
     }
 
     input {
@@ -20,6 +27,7 @@
       cursor: pointer;
       color: var(--gray-200);
     }
+
 
     input,
     select {
@@ -33,11 +41,6 @@
       &:focus {
         border: 2px solid var(--green-100);
         box-shadow: 1px 1px 5px var(--green-200);
-      }
-
-      &.error {
-        border: 2px solid var(--danger);
-        box-shadow: 1px 1px 5px var(--danger);
       }
 
     }

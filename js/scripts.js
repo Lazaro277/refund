@@ -67,19 +67,15 @@ amountInput.addEventListener('input', () => {
   const digits = amountInput.value.replace(/\D/g, '')
   //divide o valor por 100, para ficar com o padrão 0,00
   const amount = Number(digits || 0) / 100
-  //formata para ficar com 2 casas decimais e virgula
-  const formattedAmount = amount.toLocaleString('pt-BR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
 
-  //adiciona o R$ no input, e se tiver vazio remove
-  amountInput.value = amount ? `R$ ${formattedAmount}` : ''
+  //adiciona o R$ no input, e se tiver vazio remove. E formata para o padrao brasileiro
+  amountInput.value = amount ? `R$ ${formatCurrencyBRL(amount)}` : ''
   //move sempre o cursor para o final do campo
   amountInput.setSelectionRange(amountInput.value.length, amountInput.value.length)
 
   validateForm()
 })
+
 
 function validateForm() {
   //verifica se cada campo tem valor
@@ -90,13 +86,18 @@ function validateForm() {
   //se não tiver valor, adiciona a classe disabled no botao
   submitButton.classList.toggle('disabled', !hasValue || !hasCategory || !hasTitle)
 
-  //cada input recebe a classe error, se for vazio na validação
-  titleInput.classList.toggle('error', !hasTitle)
-  categorySelect.classList.toggle('error', !hasCategory)
-  amountInput.classList.toggle('error', !hasValue)
-
   //retorna para o submit verificar tudo foi preenchido para ser cadastrado
   return hasValue && hasCategory && hasTitle
+}
+
+//formata para ficar com 2 casas decimais e virgula
+function formatCurrencyBRL(value) {
+  value = value.toLocaleString('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+
+  return value
 }
 
 form.addEventListener('submit', (event) => {
@@ -113,14 +114,12 @@ form.addEventListener('submit', (event) => {
 
     const totalValue = document.querySelector('#total-value')
     const numericAmount = Number(
+      // tira o simbolo de reais e o que não são numeros, e troca a virgula por ponto
       amountValue.replace('R$ ', '').replace(/\./g, '').replace(',', '.')
     )
 
     totalAmount += numericAmount
-    totalValue.textContent = totalAmount.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })
+    totalValue.textContent = formatCurrencyBRL(totalAmount)
 
     //cria os elementos e insere na lista
     const li = document.createElement('li')
@@ -131,25 +130,32 @@ form.addEventListener('submit', (event) => {
     const imgCategory = document.createElement('img')
     const imgRemove = document.createElement('img')
 
+    //adiciona ids necessarios
     li.id = `expense_${countExpense}`
     expenseIcon.id = 'expense-icon'
     expenseDescription.id = 'expense-description'
     expenseValue.id = 'expense-value'
     expenseCategory.id = 'expense-category'
 
+    //link da imagem dinamicamente de acordo com a despesa
     imgCategory.src = `assets/icons/${imagesNames[categoryValue].nameImage}.svg`
+    //icone de remover
     imgRemove.src = 'assets/icons/remove.svg'
     imgRemove.style.cursor = 'pointer'
     imgRemove.addEventListener('click', () => {
+      //clicando nele, ele remove a li, verifica se a lista ficou vazia
       li.remove()
       emptyList()
 
+      //atualiza as contagens de despesa e o total
       totalAmount -= numericAmount
-      totalValue.textContent = totalAmount.toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+      totalAmount = Number(totalAmount.toFixed(2))
+      if (totalAmount < 0) {
+        totalAmount = 0
+      }
+      totalValue.textContent = formatCurrencyBRL(totalAmount)
 
+      //coloca no plural ou singular de acordo com a quantidade de despesas
       if (expenseList.querySelectorAll('li').length <= 2) {
         countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesa`
       } else {
@@ -182,6 +188,9 @@ form.addEventListener('submit', (event) => {
     titleInput.value = ''
     categorySelect.value = 0
     amountInput.value = ''
+
+    //coloca o foco no titulo
+    titleInput.focus()
 
   }
 })
