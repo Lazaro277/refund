@@ -2,7 +2,7 @@
 
 Aplicação web desenvolvida para cadastrar, organizar e acompanhar despesas de forma simples e intuitiva.
 
-<kbd> </kbd> **Acesse o projeto:** [https://lazarom.dev/refund/](https://lazarom.dev/refund/)
+<kbd> </kbd> [**Acesse o projeto:**](https://lazarom.dev/refund/)
 
 O projeto permite registrar despesas por categoria, acompanhar a quantidade de lançamentos e visualizar automaticamente o valor total acumulado.
 
