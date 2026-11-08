@@ -6,8 +6,85 @@ const form = document.querySelector('form')
 const expenseList = document.querySelector('.expense-list')
 let countExpense = 0
 let totalAmount = 0
+let expenses = []
+
+// recupera as despesas salvas no navegador
+try {
+  const savedExpenses = localStorage.getItem('refund-expenses')
+
+  expenses = savedExpenses ? JSON.parse(savedExpenses) : []
+
+  if (!Array.isArray(expenses)) {
+    expenses = []
+  }
+} catch (error) {
+  expenses = []
+  localStorage.removeItem('refund-expenses')
+}
+
+// salva as despesas no navegador
+function saveExpenses() {
+  localStorage.setItem('refund-expenses', JSON.stringify(expenses))
+}
+
+function renderExpenses() {
+  // Remove as despesas exibidas anteriormente, mantendo a mensagem de lista vazia
+  expenseList.querySelectorAll('li:not(#empty-message)').forEach(li => li.remove())
+
+  // Cria novamente os elementos de cada despesa salva
+  expenses.forEach(expense => {
+    const li = document.createElement('li')
+    const expenseIcon = document.createElement('span')
+    const expenseDescription = document.createElement('span')
+    const expenseValue = document.createElement('span')
+    const expenseCategory = document.createElement('span')
+    const imgCategory = document.createElement('img')
+    const imgRemove = document.createElement('img')
+
+    // Adiciona os IDs necessários para a estilização
+    expenseIcon.id = 'expense-icon'
+    expenseDescription.id = 'expense-description'
+    expenseValue.id = 'expense-value'
+    expenseCategory.id = 'expense-category'
+
+    imgCategory.src = `assets/icons/${imagesNames[expense.category].nameImage}.svg`
+    imgRemove.src = 'assets/icons/remove.svg'
+    imgRemove.style.cursor = 'pointer'
+
+    imgRemove.addEventListener('click', () => {
+      expenses = expenses.filter(item => item.id !== expense.id)
+
+      saveExpenses()
+      renderExpenses()
+    })
+
+    expenseDescription.textContent = expense.title
+    expenseCategory.textContent = expense.category
+    expenseValue.textContent = `R$ ${formatCurrencyBRL(expense.amount)}`
+
+    expenseIcon.append(imgCategory)
+    expenseDescription.append(expenseCategory)
+    expenseValue.append(imgRemove)
+
+    li.append(expenseIcon, expenseDescription, expenseValue)
+    expenseList.append(li)
+  })
+
+  // Atualiza a quantidade de despesas
+  const count = expenses.length
+
+  countExpenseElement.textContent = `${count} ${count === 1 ? 'despesa' : 'despesas'}`
+
+  // Recalcula o valor total
+  totalAmount = expenses.reduce((total, expense) => total + expense.amount, 0)
+
+  document.querySelector('#total-value').textContent = formatCurrencyBRL(totalAmount)
+
+  // Atualiza a mensagem de lista vazia
+  emptyList()
+}
+
 const countExpenseElement = document.querySelector('#count-expense')
-countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesa`
 
 const imagesNames = {
   Alimentação: {
@@ -103,99 +180,46 @@ function formatCurrencyBRL(value) {
 form.addEventListener('submit', (event) => {
   event.preventDefault()
 
-  //se tudo estiver preenchido, segue para inserir' a despesa
   if (validateForm()) {
+    const titleValue = titleInput.value.replace(
+      /(^\w{1})|(\s+\w{1})/g,
+      letra => letra.toUpperCase()
+    )
 
-
-    //salva os valores digitados pelo usuário, no title, deixa com a primeira letra maiuscúla
-    const titleValue = titleInput.value.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
     const categoryValue = categorySelect.options[categorySelect.selectedIndex].textContent
+
     const amountValue = amountInput.value
 
-    const totalValue = document.querySelector('#total-value')
     const numericAmount = Number(
-      // tira o simbolo de reais e o que não são numeros, e troca a virgula por ponto
       amountValue.replace('R$ ', '').replace(/\./g, '').replace(',', '.')
     )
 
-    totalAmount += numericAmount
-    totalValue.textContent = formatCurrencyBRL(totalAmount)
-
-    //cria os elementos e insere na lista
-    const li = document.createElement('li')
-    const expenseIcon = document.createElement('span')
-    const expenseDescription = document.createElement('span')
-    const expenseValue = document.createElement('span')
-    const expenseCategory = document.createElement('span')
-    const imgCategory = document.createElement('img')
-    const imgRemove = document.createElement('img')
-
-    //adiciona ids necessarios
-    li.id = `expense_${countExpense}`
-    expenseIcon.id = 'expense-icon'
-    expenseDescription.id = 'expense-description'
-    expenseValue.id = 'expense-value'
-    expenseCategory.id = 'expense-category'
-
-    //link da imagem dinamicamente de acordo com a despesa
-    imgCategory.src = `assets/icons/${imagesNames[categoryValue].nameImage}.svg`
-    //icone de remover
-    imgRemove.src = 'assets/icons/remove.svg'
-    imgRemove.style.cursor = 'pointer'
-    imgRemove.addEventListener('click', () => {
-      //clicando nele, ele remove a li, verifica se a lista ficou vazia
-      li.remove()
-      emptyList()
-
-      //atualiza as contagens de despesa e o total
-      totalAmount -= numericAmount
-      totalAmount = Number(totalAmount.toFixed(2))
-      if (totalAmount < 0) {
-        totalAmount = 0
-      }
-      totalValue.textContent = formatCurrencyBRL(totalAmount)
-
-      //coloca no plural ou singular de acordo com a quantidade de despesas
-      if (expenseList.querySelectorAll('li').length <= 2) {
-        countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesa`
-      } else {
-        countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesas`
-      }
+    // Adiciona a nova despesa ao array
+    expenses.push({
+      id: crypto.randomUUID(),
+      title: titleValue,
+      category: categoryValue,
+      amount: numericAmount
     })
 
-    expenseIcon.append(imgCategory)
-    expenseDescription.textContent = titleValue
-    expenseCategory.textContent = categoryValue
-    expenseValue.textContent = amountValue
-    expenseValue.append(imgRemove)
+    // Salva e atualiza a lista
+    saveExpenses()
+    renderExpenses()
 
-    expenseDescription.append(expenseCategory)
-    li.append(expenseIcon, expenseDescription, expenseValue)
-    expenseList.append(li)
-    countExpense++
-
-    if (expenseList.querySelectorAll('li').length <= 2) {
-      countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesa`
-    } else {
-      countExpenseElement.textContent = `${expenseList.querySelectorAll('li').length - 1} despesas`
-    }
-
-
-    //remove a mensagem de lista vazia
-    emptyList()
-
-    //limpa os campos após a insersão
+    // Limpa os campos após a inserção
     titleInput.value = ''
     categorySelect.value = 0
     amountInput.value = ''
 
-    //coloca o foco no titulo
+    // Coloca o foco no título
     titleInput.focus()
-
   }
 })
 
 function emptyList() {
   expenseList.classList.toggle('hide-empty-message', expenseList.querySelectorAll('li').length !== 1)
 }
+
+// Exibe as despesas salvas ao carregar a página
+renderExpenses()
 
