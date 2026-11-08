@@ -4,7 +4,6 @@ const titleInput = document.querySelector('#company-title')
 const submitButton = document.querySelector('form button[type="submit"]')
 const form = document.querySelector('form')
 const expenseList = document.querySelector('.expense-list')
-let countExpense = 0
 let totalAmount = 0
 let expenses = []
 
@@ -24,7 +23,13 @@ try {
 
 // salva as despesas no navegador
 function saveExpenses() {
-  localStorage.setItem('refund-expenses', JSON.stringify(expenses))
+  try {
+    localStorage.setItem('refund-expenses', JSON.stringify(expenses))
+    return true
+  } catch (error) {
+    console.error('Não foi possível salvar as despesas:', error)
+    return false
+  }
 }
 
 function renderExpenses() {
@@ -158,7 +163,12 @@ function validateForm() {
   //verifica se cada campo tem valor
   const hasValue = amountInput.value.trim() !== ''
   const hasTitle = titleInput.value.trim() !== ''
-  const hasCategory = Number(categorySelect.value) !== 0
+  const hasCategory =
+    Number(categorySelect.value) !== 0 &&
+    Object.prototype.hasOwnProperty.call(
+      imagesNames,
+      categorySelect.options[categorySelect.selectedIndex].textContent
+    )
 
   //se não tiver valor, adiciona a classe disabled no botao
   submitButton.classList.toggle('disabled', !hasValue || !hasCategory || !hasTitle)
@@ -203,8 +213,13 @@ form.addEventListener('submit', (event) => {
     })
 
     // Salva e atualiza a lista
-    saveExpenses()
-    renderExpenses()
+    if (saveExpenses()) {
+      renderExpenses()
+    } else {
+      expenses.pop()
+      alert('Não foi possível salvar a despesa. Tente novamente.')
+      return
+    }
 
     // Limpa os campos após a inserção
     titleInput.value = ''
@@ -214,10 +229,30 @@ form.addEventListener('submit', (event) => {
     // Coloca o foco no título
     titleInput.focus()
   }
+
+  validateForm()
 })
 
 function emptyList() {
   expenseList.classList.toggle('hide-empty-message', expenseList.querySelectorAll('li').length !== 1)
+}
+
+// Remove registros inválidos recuperados do localStorage
+const savedExpensesCount = expenses.length
+
+expenses = expenses.filter(expense =>
+  expense &&
+  typeof expense.id === 'string' &&
+  typeof expense.title === 'string' &&
+  expense.title.trim() !== '' &&
+  Object.prototype.hasOwnProperty.call(imagesNames, expense.category) &&
+  typeof expense.amount === 'number' &&
+  Number.isFinite(expense.amount) &&
+  expense.amount > 0
+)
+
+if (expenses.length !== savedExpensesCount) {
+  saveExpenses()
 }
 
 // Exibe as despesas salvas ao carregar a página
